@@ -28,13 +28,14 @@ namespace Bobbins.Frontend.Controllers
         {
             comment.User = User.FindFirst(BobbinsClaimTypes.ScreenName).Value;
             comment = await _comments.Create(comment, ct).ConfigureAwait(false);
-            return CreatedAtAction("View", new {linkId = comment.LinkId, id = comment.Id}, comment);
+            return RedirectToAction("View", "Links", new {id = comment.LinkId});
         }
 
         [HttpGet("{linkId}/{id}")]
         public async Task<IActionResult> View(int linkId, int id, CancellationToken ct)
         {
-            var comment = await _comments.Get(linkId, id, ct);
+            _logger.LogInformation($"Comments.View({linkId}, {id})");
+            var comment = await _comments.Get(id, ct);
             if (comment == null) return NotFound();
             var viewModel = new CommentPageViewModel
             {
@@ -51,7 +52,7 @@ namespace Bobbins.Frontend.Controllers
         [HttpPut("{linkId}/{id}/upvote")]
         public async Task<IActionResult> UpVote(int id, CancellationToken ct)
         {
-            var comment = await _comments.Get(id, ct).ConfigureAwait(false);
+            var comment = await _comments.GetForLink(id, ct).ConfigureAwait(false);
             if (comment == null) return NotFound();
 
             try
@@ -67,9 +68,9 @@ namespace Bobbins.Frontend.Controllers
         }
 
         [HttpPut("{linkId}/{id}/downvote")]
-        public async Task<IActionResult> UpVote(int id, CancellationToken ct)
+        public async Task<IActionResult> DownVote(int id, CancellationToken ct)
         {
-            var comment = await _comments.Get(id, ct).ConfigureAwait(false);
+            var comment = await _comments.GetForLink(id, ct).ConfigureAwait(false);
             if (comment == null) return NotFound();
 
             try

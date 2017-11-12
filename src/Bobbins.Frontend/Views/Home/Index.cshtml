@@ -22,7 +22,19 @@
                     <h4><a href="@link.Url">@link.Title</a></h4>
                 </div>
                 <div class="panel-footer">
-                    <span class="fa fa-arrow-up"></span>@link.UpVoteCount / <span class="fa fa-arrow-down"></span>@link.DownVoteCount
+                    <span>
+                        <a asp-controller="Links" asp-action="UpVote" asp-route-id="@link.Id" class="scriptable">
+                            <span class="fa fa-arrow-up"></span>
+                        </a>
+                        <span class="up-vote-count">@link.UpVoteCount</span>
+                    </span>
+                    /
+                    <span>
+                        <a asp-controller="Links" asp-action="DownVote" asp-route-id="@link.Id" class="scriptable">
+                            <span class="fa fa-arrow-down"></span>
+                        </a>
+                        <span class="down-vote-count">@link.DownVoteCount</span>
+                    </span>
                     submitted by @link.User at @link.CreatedAt.ToString("s") ::
                     <a asp-controller="Links" asp-action="View" asp-route-id="@link.Id">
                         @link.CommentCount comments
@@ -31,4 +43,9 @@
             </div>
         </div>
     </div>
+}
+
+@section Scripts
+{
+    <script src="js/links.js"></script>
 }

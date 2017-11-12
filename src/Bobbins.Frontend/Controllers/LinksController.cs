@@ -54,7 +54,7 @@ namespace Bobbins.Frontend.Controllers
             var link = await _links.Get(id, ct).ConfigureAwait(false);
             if (link == null) return NotFound();
 
-            var comments = (await _comments.Get(link.Id, ct).ConfigureAwait(false))
+            var comments = (await _comments.GetForLink(link.Id, ct).ConfigureAwait(false))
                            ?? new List<Comment>(0);
 
             var viewModel = new LinkPageViewModel
@@ -67,39 +67,39 @@ namespace Bobbins.Frontend.Controllers
             return View(viewModel);
         }
 
-        [HttpPut("{id}/upvote")]
-        public async Task<IActionResult> UpVote(int id, CancellationToken ct)
+        [HttpGet("{id}/upvote"), HttpPut("{id}/upvote")]
+        public async Task<IActionResult> UpVote(int id, [FromQuery]bool scripted, CancellationToken ct)
         {
             var link = await _links.Get(id, ct).ConfigureAwait(false);
-            if (link == null) return NotFound();
+            if (link == null) return scripted ? (IActionResult) NotFound() : RedirectToAction("Index", "Home");
 
             try
             {
                 await _links.UpVote(id, User, ct).ConfigureAwait(false);
-                return Accepted();
+                return scripted ? (IActionResult) Accepted() : RedirectToAction("View", new {id});
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error in UpVote: {ex.Message}");
-                return StatusCode(304);
+                return scripted ? (IActionResult) StatusCode(304) : RedirectToAction("View", new {id});
             }
         }
 
-        [HttpPut("{id}/downvote")]
-        public async Task<IActionResult> UpVote(int id, CancellationToken ct)
+        [HttpGet("{id}/downvote"), HttpPut("{id}/downvote")]
+        public async Task<IActionResult> DownVote(int id, [FromQuery]bool scripted, CancellationToken ct)
         {
             var link = await _links.Get(id, ct).ConfigureAwait(false);
-            if (link == null) return NotFound();
+            if (link == null) return scripted ? (IActionResult) NotFound() : RedirectToAction("Index", "Home");
 
             try
             {
                 await _links.DownVote(id, User, ct).ConfigureAwait(false);
-                return Accepted();
+                return scripted ? (IActionResult) Accepted() : RedirectToAction("View", new {id});
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error in UpVote: {ex.Message}");
-                return StatusCode(304);
+                return scripted ? (IActionResult) StatusCode(304) : RedirectToAction("View", new {id});
             }
         }
     }

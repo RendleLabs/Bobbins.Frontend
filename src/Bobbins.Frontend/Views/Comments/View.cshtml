@@ -6,7 +6,7 @@
     ViewBag.Title = $"Reply to comment";
 }
 
-@Html.PartialAsync("Comment", Model.Comment)
+@Html.Partial("Comment", Model.Comment)
 
 <div class="row">
         <form asp-controller="Comments" asp-action="Create" method="post">
