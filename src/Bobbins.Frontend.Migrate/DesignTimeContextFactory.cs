@@ -1,16 +1,17 @@
 using System.Linq;
 using Bobbins.Frontend.Data;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace Bobbins.Frontend.Migrate
 {
-    public class DesignTimeFooContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+    [UsedImplicitly]
+    public class DesignTimeContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
     {
-        public const string LocalPostgres = "Host=localhost;Database=foo;Username=vids;Password=secretsquirrel";
-        public static readonly string MigrationAssemblyName =
-            typeof(DesignTimeFooContextFactory).Assembly.GetName().Name;
+        private const string LocalPostgres = "Host=localhost;Database=frontend;Username=bobbins;Password=secretsquirrel";
 
+        private static readonly string MigrationAssemblyName = typeof(DesignTimeContextFactory).Assembly.GetName().Name;
 
         public ApplicationDbContext CreateDbContext(string[] args)
         {

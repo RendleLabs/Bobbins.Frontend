@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Bobbins.Frontend.Data;
 using Bobbins.Frontend.Data.Models;
-using Bobbins.Frontend.Models;
+using Bobbins.Frontend.Models.Links;
+using Bobbins.Frontend.Options;
 using Bobbins.Frontend.Services;
 
 namespace Bobbins.Frontend
@@ -36,6 +33,11 @@ namespace Bobbins.Frontend
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, BobbinsClaimsPrincipalFactory>();
+
+            services.Configure<ServiceOptions>(Configuration.GetSection("Services"));
+            services.AddSingleton<ILinkService, LinkService>();
+            services.AddSingleton<ICommentService, CommentService>();
 
             services.AddMvc();
         }

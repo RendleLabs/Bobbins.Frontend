@@ -1,0 +1,25 @@
+﻿@using Bobbins.Frontend.Models.Comments
+@using Bobbins.Frontend.Models.Links
+@model LinkPageViewModel
+
+@{
+    ViewBag.Title = $"Bobbin : {Model.Link.Title}";
+}
+
+<h2>@Model.Link.Title</h2>
+
+@foreach (var comment in Model.Comments)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="well">
+                @comment.Text
+            </div>
+        </div>
+    </div>
+}
+
+@helper RenderComment(Comment comment)
+{
+    
+}
