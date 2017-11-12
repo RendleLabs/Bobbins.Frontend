@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using Bobbins.Frontend.Data;
 using Bobbins.Frontend.Models.Comments;
+using Bobbins.Frontend.Models.Links;
 using Bobbins.Frontend.Options;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 
 namespace Bobbins.Frontend.Services
 {
+    [PublicAPI]
     public class CommentService : ICommentService
     {
         private readonly HttpClient _http;
@@ -37,6 +42,27 @@ namespace Bobbins.Frontend.Services
         {
             var response = await _http.GetAsync($"/links/{linkId}", ct).ConfigureAwait(false);
             return await response.Deserialize<List<Comment>>();
+        }
+        
+        public Task UpVote(int id, ClaimsPrincipal user, CancellationToken ct = default)
+        {
+            return Vote(id, user, 1, ct);
+        }
+
+        public Task DownVote(int id, ClaimsPrincipal user, CancellationToken ct = default)
+        {
+            return Vote(id, user, -1, ct);
+        }
+
+        private Task Vote(int id, ClaimsPrincipal user, int value, CancellationToken ct)
+        {
+            var vote = new CommentVote
+            {
+                CommentId = id,
+                User = user.FindFirst(BobbinsClaimTypes.ScreenName)?.Value,
+                Value = value
+            };
+            return _http.PutJsonAsync("/votes", vote, ct);
         }
     }
 }

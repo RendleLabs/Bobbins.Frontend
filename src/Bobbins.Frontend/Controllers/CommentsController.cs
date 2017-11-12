@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Bobbins.Frontend.Data;
 using Bobbins.Frontend.Models.Comments;
@@ -45,6 +46,42 @@ namespace Bobbins.Frontend.Controllers
                 }
             };
             return View(viewModel);
+        }
+
+        [HttpPut("{linkId}/{id}/upvote")]
+        public async Task<IActionResult> UpVote(int id, CancellationToken ct)
+        {
+            var comment = await _comments.Get(id, ct).ConfigureAwait(false);
+            if (comment == null) return NotFound();
+
+            try
+            {
+                await _comments.UpVote(id, User, ct).ConfigureAwait(false);
+                return Accepted();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in UpVote: {ex.Message}");
+                return StatusCode(304);
+            }
+        }
+
+        [HttpPut("{linkId}/{id}/downvote")]
+        public async Task<IActionResult> UpVote(int id, CancellationToken ct)
+        {
+            var comment = await _comments.Get(id, ct).ConfigureAwait(false);
+            if (comment == null) return NotFound();
+
+            try
+            {
+                await _comments.DownVote(id, User, ct).ConfigureAwait(false);
+                return Accepted();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in UpVote: {ex.Message}");
+                return StatusCode(304);
+            }
         }
     }
 }

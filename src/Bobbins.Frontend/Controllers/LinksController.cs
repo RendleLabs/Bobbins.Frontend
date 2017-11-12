@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Bobbins.Frontend.Data;
@@ -8,6 +9,7 @@ using Bobbins.Frontend.Models.Links;
 using Bobbins.Frontend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Bobbins.Frontend.Controllers
 {
@@ -17,11 +19,13 @@ namespace Bobbins.Frontend.Controllers
     {
         private readonly ILinkService _links;
         private readonly ICommentService _comments;
+        private readonly ILogger<LinksController> _logger;
 
-        public LinksController(ILinkService links, ICommentService comments)
+        public LinksController(ILinkService links, ICommentService comments, ILogger<LinksController> logger)
         {
             _links = links;
             _comments = comments;
+            _logger = logger;
         }
 
         [HttpGet("create")]
@@ -61,6 +65,42 @@ namespace Bobbins.Frontend.Controllers
             };
 
             return View(viewModel);
+        }
+
+        [HttpPut("{id}/upvote")]
+        public async Task<IActionResult> UpVote(int id, CancellationToken ct)
+        {
+            var link = await _links.Get(id, ct).ConfigureAwait(false);
+            if (link == null) return NotFound();
+
+            try
+            {
+                await _links.UpVote(id, User, ct).ConfigureAwait(false);
+                return Accepted();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in UpVote: {ex.Message}");
+                return StatusCode(304);
+            }
+        }
+
+        [HttpPut("{id}/downvote")]
+        public async Task<IActionResult> UpVote(int id, CancellationToken ct)
+        {
+            var link = await _links.Get(id, ct).ConfigureAwait(false);
+            if (link == null) return NotFound();
+
+            try
+            {
+                await _links.DownVote(id, User, ct).ConfigureAwait(false);
+                return Accepted();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in UpVote: {ex.Message}");
+                return StatusCode(304);
+            }
         }
     }
 }
