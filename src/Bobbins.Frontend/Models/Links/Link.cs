@@ -1,7 +1,9 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace Bobbins.Frontend.Models.Links
 {
+    [PublicAPI]
     public class Link
     {
         public int Id { get; set; }

@@ -1,15 +1,12 @@
 ﻿@using Bobbins.Frontend.Models.Comments
-@using Bobbins.Frontend.Models.Links
 @using Microsoft.AspNetCore.Mvc.Rendering
-@model LinkPageViewModel
+@model CommentPageViewModel
 
 @{
-    ViewBag.Title = $"Bobbin : {Model.Link.Title}";
+    ViewBag.Title = $"Reply to comment";
 }
 
-<div class="row">
-    <h2>@Model.Link.Title</h2>
-</div>
+@Html.PartialAsync("Comment", Model.Comment)
 
 <div class="row">
         <form asp-controller="Comments" asp-action="Create" method="post">
@@ -17,13 +14,9 @@
                 <label for="Text">Comment:</label>
                 <textarea id="Text" name="Text" class="form-control"></textarea>
             </div>
-            <input type="hidden" name="LinkId" value="@Model.Link.Id"/>
+            <input type="hidden" name="LinkId" value="@Model.NewComment.LinkId"/>
+            <input type="hidden" name="ReplyToId" value="@Model.NewComment.ReplyToId"/>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
 </div>
-
-@foreach (var comment in Model.Comments)
-{
-    @Html.Partial("Comment", comment);
-}
 

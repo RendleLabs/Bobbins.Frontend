@@ -8,7 +8,7 @@ namespace Bobbins.Frontend.Services
     public interface ICommentService
     {
         Task<Comment> Create(Comment comment, CancellationToken ct = default);
-        Task<List<Comment>> Get(int linkId, int id, CancellationToken ct = default);
+        Task<Comment> Get(int linkId, int id, CancellationToken ct = default);
         Task<List<Comment>> Get(int linkId, CancellationToken ct = default);
     }
 }

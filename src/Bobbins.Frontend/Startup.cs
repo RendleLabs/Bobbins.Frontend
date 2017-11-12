@@ -9,9 +9,11 @@ using Bobbins.Frontend.Data.Models;
 using Bobbins.Frontend.Models.Links;
 using Bobbins.Frontend.Options;
 using Bobbins.Frontend.Services;
+using JetBrains.Annotations;
 
 namespace Bobbins.Frontend
 {
+    [PublicAPI]
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -24,8 +26,8 @@ namespace Bobbins.Frontend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContextPool<ApplicationDbContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

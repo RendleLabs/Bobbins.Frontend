@@ -8,9 +8,11 @@
 <div class="row">
     <h3>This Is Bobbins</h3>
 </div>
+<hr>
 <div class="row">
-    <a class="btn btn-primary btn-sm">Submit a new link...</a>
+    <a class="btn btn-primary btn-sm" asp-controller="Links" asp-action="CreateForm">Submit a new link...</a>
 </div>
+<hr>
 @foreach (var link in Model.Links)
 {
     <div class="row">
@@ -27,13 +29,6 @@
                     </a>
                 </div>
             </div>
-            <h4><a href="@link.Url">@link.Title</a></h4>
-            <p class="small">
-                submitted by @link.User at @link.CreatedAt.ToString("s") ::
-                <a asp-controller="Links" asp-action="View" asp-route-id="@link.Id">
-                    @link.CommentCount comments
-                </a>
-            </p>
         </div>
     </div>
 }

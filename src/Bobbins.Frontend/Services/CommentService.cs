@@ -27,10 +27,10 @@ namespace Bobbins.Frontend.Services
             return await response.Deserialize<Comment>();
         }
 
-        public async Task<List<Comment>> Get(int linkId, int id, CancellationToken ct = default)
+        public async Task<Comment> Get(int linkId, int id, CancellationToken ct = default)
         {
             var response = await _http.GetAsync($"/comments/{linkId}/{id}", ct).ConfigureAwait(false);
-            return await response.Deserialize<List<Comment>>();
+            return await response.Deserialize<Comment>();
         }
 
         public async Task<List<Comment>> Get(int linkId, CancellationToken ct = default)

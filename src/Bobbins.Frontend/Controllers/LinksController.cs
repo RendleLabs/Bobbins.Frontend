@@ -56,7 +56,8 @@ namespace Bobbins.Frontend.Controllers
             var viewModel = new LinkPageViewModel
             {
                 Link = link,
-                Comments = comments
+                Comments = comments,
+                NewComment = new Comment { LinkId = id }
             };
 
             return View(viewModel);

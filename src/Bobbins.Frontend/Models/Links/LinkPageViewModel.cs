@@ -7,5 +7,6 @@ namespace Bobbins.Frontend.Models.Links
     {
         public Link Link { get; set; }
         public List<Comment> Comments { get; set; }
+        public Comment NewComment { get; set; } = new Comment();
     }
 }

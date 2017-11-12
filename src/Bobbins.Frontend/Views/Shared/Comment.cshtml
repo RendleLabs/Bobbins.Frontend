@@ -1,0 +1,25 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@model Bobbins.Frontend.Models.Comments.Comment
+
+<div class="row">
+    <div class="col-md-11 col-md-offset-1">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @Model.Text
+            </div>
+            <div class="panel-footer">
+                <span class="fa fa-arrow-up"></span>@Model.UpVoteCount / <span class="fa fa-arrow-down"></span>@Model.DownVoteCount
+                from @Model.User at @Model.CreatedAt.ToString("s") :: @Model.ReplyCount replies
+                <br>
+                <a class="btn btn-sm btn-info" asp-controller="Comments" asp-action="View" asp-route-id="@Model.Id" asp-route-linkId="@Model.LinkId">Reply</a>
+            </div>
+        </div>
+        if (@Model.Replies != null)
+        {
+            foreach (var reply in Model.Replies)
+            {
+                @Html.Partial("Comment", reply)
+            }
+        }
+    </div>
+</div>

@@ -9,7 +9,7 @@ namespace Bobbins.Frontend.Models.AccountViewModels
     public class RegisterViewModel
     {
         [Required]
-        [StringLength(16, MinimumLength = 3, ErrorMessage = "{0} must be at least {2} and at most {3} characters.")]
+        [StringLength(16, MinimumLength = 3, ErrorMessage = "{0} must be at least {2} and at most {1} characters.")]
         [Display(Name = "Screen name")]
         public string ScreenName { get; set; }
         
