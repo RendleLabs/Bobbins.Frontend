@@ -50,9 +50,9 @@ namespace Bobbins.Frontend.Controllers
         }
 
         [HttpPut("{linkId}/{id}/upvote")]
-        public async Task<IActionResult> UpVote(int id, CancellationToken ct)
+        public async Task<IActionResult> UpVote(int linkId, int id, CancellationToken ct)
         {
-            var comment = await _comments.GetForLink(id, ct).ConfigureAwait(false);
+            var comment = await _comments.Get(id, ct).ConfigureAwait(false);
             if (comment == null) return NotFound();
 
             try
@@ -68,9 +68,9 @@ namespace Bobbins.Frontend.Controllers
         }
 
         [HttpPut("{linkId}/{id}/downvote")]
-        public async Task<IActionResult> DownVote(int id, CancellationToken ct)
+        public async Task<IActionResult> DownVote(int linkId, int id, CancellationToken ct)
         {
-            var comment = await _comments.GetForLink(id, ct).ConfigureAwait(false);
+            var comment = await _comments.Get(id, ct).ConfigureAwait(false);
             if (comment == null) return NotFound();
 
             try

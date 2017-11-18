@@ -8,7 +8,7 @@
 }
 
 <div class="row">
-    <h2>@Model.Link.Title</h2>
+    <h2><a href="@Model.Link.Url">@Model.Link.Title</a></h2>
 </div>
 
 <div class="row">
@@ -27,3 +27,7 @@
     @Html.Partial("Comment", comment);
 }
 
+@section Scripts
+{
+    <script src="/js/scriptify.js"></script>
+}

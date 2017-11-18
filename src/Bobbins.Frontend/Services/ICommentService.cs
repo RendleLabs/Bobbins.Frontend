@@ -9,7 +9,7 @@ namespace Bobbins.Frontend.Services
     public interface ICommentService
     {
         Task<Comment> Create(Comment comment, CancellationToken ct = default);
-        Task<Comment> Get(int id, CancellationToken ct = default);
+        Task<Comment> Get(int linkId, int id, CancellationToken ct = default);
         Task<List<Comment>> GetForLink(int linkId, CancellationToken ct = default);
         Task UpVote(int id, ClaimsPrincipal user, CancellationToken ct = default);
         Task DownVote(int id, ClaimsPrincipal user, CancellationToken ct = default);

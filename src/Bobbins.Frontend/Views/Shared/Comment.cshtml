@@ -8,7 +8,19 @@
                 @Model.Text
             </div>
             <div class="panel-footer">
-                <span class="fa fa-arrow-up"></span>@Model.UpVoteCount / <span class="fa fa-arrow-down"></span>@Model.DownVoteCount
+                <span>
+                    <a asp-controller="Comments" asp-action="UpVote" asp-route-id="@Model.Id" asp-route-linkId="@Model.LinkId" class="scriptable">
+                        <span class="fa fa-arrow-up"></span>
+                    </a>
+                    <span class="up-vote-count">@Model.UpVoteCount</span>
+                </span>
+                /
+                <span>
+                    <a asp-controller="Comments" asp-action="DownVote" asp-route-id="@Model.Id" asp-route-linkId="@Model.LinkId" class="scriptable">
+                        <span class="fa fa-arrow-down"></span>
+                    </a>
+                    <span class="down-vote-count">@Model.DownVoteCount</span>
+                </span>
                 from @Model.User at @Model.CreatedAt.ToString("s") :: @Model.ReplyCount replies
                 <br>
                 <a class="btn btn-sm btn-info" asp-controller="Comments" asp-action="View" asp-route-id="@Model.Id" asp-route-linkId="@Model.LinkId">Reply</a>
