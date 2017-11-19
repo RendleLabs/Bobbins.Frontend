@@ -51,6 +51,11 @@ namespace Bobbins.Frontend.Services
             return Vote(id, user, -1, ct);
         }
 
+        public Task CommentAdded(int id, CancellationToken ct = default)
+        {
+            return _http.PutAsync($"/links/{id}/comment-added", new StringContent(string.Empty), ct);
+        }
+
         private Task Vote(int id, ClaimsPrincipal user, int value, CancellationToken ct)
         {
             var vote = new LinkVote

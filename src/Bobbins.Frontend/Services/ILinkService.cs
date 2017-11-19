@@ -13,5 +13,6 @@ namespace Bobbins.Frontend.Services
         Task<Link> Get(int id, CancellationToken ct = default);
         Task UpVote(int id, ClaimsPrincipal user, CancellationToken ct = default);
         Task DownVote(int id, ClaimsPrincipal user, CancellationToken ct = default);
+        Task CommentAdded(int id, CancellationToken ct = default);
     }
 }

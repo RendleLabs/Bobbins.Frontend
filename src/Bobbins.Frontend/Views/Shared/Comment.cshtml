@@ -23,7 +23,7 @@
                 </span>
                 from @Model.User at @Model.CreatedAt.ToString("s") :: @Model.ReplyCount replies
                 <br>
-                <a class="btn btn-sm btn-info" asp-controller="Comments" asp-action="View" asp-route-id="@Model.Id" asp-route-linkId="@Model.LinkId">Reply</a>
+                <a class="btn btn-xs btn-info" asp-controller="Comments" asp-action="View" asp-route-id="@Model.Id" asp-route-linkId="@Model.LinkId">Reply</a>
             </div>
         </div>
         @if (Model.Replies != null)

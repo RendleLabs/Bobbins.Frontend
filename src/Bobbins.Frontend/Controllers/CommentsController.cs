@@ -15,12 +15,14 @@ namespace Bobbins.Frontend.Controllers
     public class CommentsController : Controller
     {
         private readonly ILogger<CommentsController> _logger;
+        private readonly ILinkService _links;
         private readonly ICommentService _comments;
 
-        public CommentsController(ILogger<CommentsController> logger, ICommentService comments)
+        public CommentsController(ILogger<CommentsController> logger, ICommentService comments, ILinkService links)
         {
             _logger = logger;
             _comments = comments;
+            _links = links;
         }
 
         [HttpPost]
@@ -28,6 +30,7 @@ namespace Bobbins.Frontend.Controllers
         {
             comment.User = User.FindFirst(BobbinsClaimTypes.ScreenName).Value;
             comment = await _comments.Create(comment, ct).ConfigureAwait(false);
+            await _links.CommentAdded(comment.LinkId, ct).ConfigureAwait(false);
             return RedirectToAction("View", "Links", new {id = comment.LinkId});
         }
 
@@ -35,7 +38,7 @@ namespace Bobbins.Frontend.Controllers
         public async Task<IActionResult> View(int linkId, int id, CancellationToken ct)
         {
             _logger.LogInformation($"Comments.View({linkId}, {id})");
-            var comment = await _comments.Get(id, ct);
+            var comment = await _comments.Get(linkId, id, ct);
             if (comment == null) return NotFound();
             var viewModel = new CommentPageViewModel
             {
@@ -52,7 +55,7 @@ namespace Bobbins.Frontend.Controllers
         [HttpPut("{linkId}/{id}/upvote")]
         public async Task<IActionResult> UpVote(int linkId, int id, CancellationToken ct)
         {
-            var comment = await _comments.Get(id, ct).ConfigureAwait(false);
+            var comment = await _comments.Get(linkId, id, ct).ConfigureAwait(false);
             if (comment == null) return NotFound();
 
             try
@@ -70,7 +73,7 @@ namespace Bobbins.Frontend.Controllers
         [HttpPut("{linkId}/{id}/downvote")]
         public async Task<IActionResult> DownVote(int linkId, int id, CancellationToken ct)
         {
-            var comment = await _comments.Get(id, ct).ConfigureAwait(false);
+            var comment = await _comments.Get(linkId, id, ct).ConfigureAwait(false);
             if (comment == null) return NotFound();
 
             try
