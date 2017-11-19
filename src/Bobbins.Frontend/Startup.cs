@@ -39,7 +39,9 @@ namespace Bobbins.Frontend
             var dpRedis = Configuration.GetValue("DataProtection:Redis", string.Empty);
             if (!string.IsNullOrWhiteSpace(dpRedis))
             {
-                services.AddDataProtection().PersistKeysToRedis(() => ConnectionMultiplexer.Connect(dpRedis).GetDatabase(), "Bobbins:Frontend:DP");
+                services.AddDataProtection()
+                    .PersistKeysToRedis(() => ConnectionMultiplexer.Connect(dpRedis).GetDatabase(),
+                    "Bobbins:Frontend:DP");
             }
 
             // Add application services.
