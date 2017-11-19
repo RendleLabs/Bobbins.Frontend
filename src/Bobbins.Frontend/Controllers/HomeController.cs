@@ -23,14 +23,14 @@ namespace Bobbins.Frontend.Controllers
         public async Task<IActionResult> Index(CancellationToken ct)
         {
             List<Link> links;
-            try
-            {
-                links = await _links.Get(ct).ConfigureAwait(false);
-            }
-            catch
-            {
-                links = new List<Link>();
-            }
+             try
+             {
+                 links = await _links.Get(ct).ConfigureAwait(false);
+             }
+             catch
+             {
+                 links = new List<Link>();
+             }
             var viewModel = new HomeViewModel
             {
                 Links = links

@@ -10,6 +10,9 @@ using Bobbins.Frontend.Models.Links;
 using Bobbins.Frontend.Options;
 using Bobbins.Frontend.Services;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using StackExchange.Redis;
 
 namespace Bobbins.Frontend
 {
@@ -32,6 +35,12 @@ namespace Bobbins.Frontend
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            var dpRedis = Configuration.GetValue("DataProtection:Redis", string.Empty);
+            if (!string.IsNullOrWhiteSpace(dpRedis))
+            {
+                services.AddDataProtection().PersistKeysToRedis(() => ConnectionMultiplexer.Connect(dpRedis).GetDatabase(), "Bobbins:Frontend:DP");
+            }
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
